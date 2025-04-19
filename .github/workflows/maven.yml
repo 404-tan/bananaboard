@@ -7,12 +7,18 @@
 # documentation.
 
 name: CI/backend
-
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
+      - feat/*
+      - hotfix/*
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
+      - release/*
 
 
 
