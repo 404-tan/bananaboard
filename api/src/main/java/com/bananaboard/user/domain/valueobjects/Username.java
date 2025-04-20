@@ -20,7 +20,7 @@ public class Username {
     public static Result<Username> create(String value){
         List<Error> errors = new ArrayList<Error>();
         if(value.trim().isEmpty()) errors.add(UserDomainError.UsernameError.Empty);
-        if(!validPattern(value)) errors.add(UserDomainError.UsernameError.InvalidUsername);
+        if(!validPattern(value)) errors.add(UserDomainError.UsernameError.Invalid);
         if(!validMinimumLength(value) ) errors.add(UserDomainError.UsernameError.TooShort);
         if(!validMaximumLength(value)) errors.add(UserDomainError.UsernameError.TooLong);
         if(!errors.isEmpty()) return Result.failure(errors);

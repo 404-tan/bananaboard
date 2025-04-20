@@ -17,7 +17,7 @@ public class Uuid {
             throw new InvalidUuidException(uuid);
         }
     }
-    public String getValue() {
-        return value.toString();
+    public UUID getValue() {
+        return this.value;
     }
 }

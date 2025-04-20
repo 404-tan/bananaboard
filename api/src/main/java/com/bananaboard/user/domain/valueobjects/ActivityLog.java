@@ -27,4 +27,7 @@ public class ActivityLog {
     public void seen(){
         this.lastSeenAt = LocalDateTime.now();
     }
+    public boolean isOnline() {
+        return lastSeenAt.isAfter(LocalDateTime.now().minusMinutes(5));
+    }
 }

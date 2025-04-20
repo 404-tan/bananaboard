@@ -5,6 +5,7 @@ import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import com.bananaboard.shared.sharedkernel.validation.Result;
 import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
@@ -36,8 +37,8 @@ public class User {
         this.id = new Uuid();
         this.log = new ActivityLog();
     }
-    public String getId(){
-        return this.id.toString();
+    public UUID getId(){
+        return this.id.getValue();
     }
     public String getUsername() {
         return username.getValue();
@@ -48,7 +49,7 @@ public class User {
     public String getEmail(){
         return email.getEmail();
     }
-    public String getProfileIconId(){
+    public UUID getProfileIconId(){
         return profileIconId.getValue();
     }
     public String getBio(){
@@ -84,8 +85,18 @@ public class User {
         if(periodBetweenCreatedAndNow.getDays() > 0) return periodBetweenCreatedAndNow.getMonths() + " days";
         return "now";
     }
+    public LocalDateTime getCreatedAt(){
+        return log.getCreatedAt();
+    }
+    public LocalDateTime getLastModifiedAt(){
+        return log.getLastModifiedAt();
+    }
 
-    public List<String> getUserRoles(){
+    public LocalDateTime getLastSeenAt(){
+        return log.getLastSeenAt();
+    }
+
+    public List<UUID> getUserRoles(){
         return this.roles.stream()
                         .map(uuid -> uuid.getValue())
                         .toList();

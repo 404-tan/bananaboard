@@ -27,7 +27,19 @@ public final class UserDomainError {
         public static final Error Empty = new Error("Username.Create","Empty", "The username cannot be empty.");
         public static final Error TooLong = new Error("Username.Create","TooLong", "The username must have at most 30 characters.");
         public static final Error TooShort = new Error("Username.Create","TooShort", "The username must have at least 3 characters.");
-        public static final Error InvalidUsername = new Error("Username.Create","InvalidUsername", "Username contains invalid characters.");
+        public static final Error Invalid = new Error("Username.Create","Invalid", "Username contains invalid characters.");
+    }
+    public static final class RoleNameError {
+        public static final Error Empty = new Error("RoleName.Create","Empty", "The role name cannot be empty.");
+        public static final Error TooLong = new Error("RoleName.Create","TooLong", "The role name must have at most 30 characters.");
+        public static final Error TooShort = new Error("RoleName.Create","TooShort", "The role name must have at least 3 characters.");
+        public static final Error Invalid = new Error("RoleName.Create","Invalid", "Role name contains invalid characters.");
+    }
+    public static final class IconNameError {
+        public static final Error Empty = new Error("IconName.Create","Empty", "The icon name cannot be empty.");
+        public static final Error TooLong = new Error("IconName.Create","TooLong", "The icon name must have at most 30 characters.");
+        public static final Error TooShort = new Error("IconName.Create","TooShort", "The icon name must have at least 3 characters.");
+        public static final Error Invalid = new Error("IconName.Create","Invalid", "Icon name contains invalid characters.");
     }
     public static final class HashedPasswordError {
         public static final Error EmptyHash = new Error("HashedPassword.Create","EmptyHash","The hash cannot be empty.");

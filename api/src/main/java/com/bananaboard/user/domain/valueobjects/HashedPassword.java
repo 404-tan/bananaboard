@@ -12,6 +12,13 @@ public class HashedPassword {
     private HashedPassword(String value) {
         this.value = value;
     }
+    
+    public static HashedPassword fromHashedValue(String hashedValue) {
+        if (hashedValue == null || hashedValue.isBlank()) {
+            throw new IllegalArgumentException("Hashed password cannot be null or empty");
+        }
+        return new HashedPassword(hashedValue);
+    }
 
     public static Result<HashedPassword> create(Password password,PasswordHasher hasher) {
         try {

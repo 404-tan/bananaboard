@@ -1,35 +1,35 @@
 package com.bananaboard.user.domain.entities;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
+import java.util.UUID;
 
 import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
+import com.bananaboard.user.domain.valueobjects.RoleName;
 
-public class Role implements GrantedAuthority{
+public class Role {
     private Uuid id;
-    private String name;
-    private Set<User> users;
+    private RoleName name;
+    private Set<Uuid> usersIds;
     
-    public Role(String name) {
+    public Role(RoleName name) {
         this.id = new Uuid();
-        this.users = Set.of();
-        this.name = "ROLE_" + name.toUpperCase();
+        this.usersIds = Set.of();
+        this.name = name;
     }
 
-    @Override
-    public String getAuthority() {
-        return name;
+
+    public UUID getId() {                                                                     
+        return id.getValue();
     }
 
-    public String getId() {                                                                     
-        return id.toString();
+    public List<UUID> getUsersIds() {
+        return this.usersIds.stream()
+                        .map(uuid -> uuid.getValue())
+                        .toList();
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,7 +45,7 @@ public class Role implements GrantedAuthority{
 
     @Override
     public String toString() {
-        return name;
+        return name.getValue();
     }
 
 }
