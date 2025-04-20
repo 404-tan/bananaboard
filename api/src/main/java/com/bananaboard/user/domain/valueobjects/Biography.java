@@ -6,8 +6,8 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 
-import com.bananaboard.sharedkernel.validation.Result;
-import com.bananaboard.sharedkernel.validation.Error;
+import com.bananaboard.shared.sharedkernel.validation.Error;
+import com.bananaboard.shared.sharedkernel.validation.Result;
 import com.bananaboard.user.domain.errors.UserDomainError;
 
 public class Biography {

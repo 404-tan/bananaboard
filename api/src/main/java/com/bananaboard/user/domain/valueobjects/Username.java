@@ -3,8 +3,8 @@ package com.bananaboard.user.domain.valueobjects;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bananaboard.sharedkernel.validation.Result;
-import com.bananaboard.sharedkernel.validation.Error;
+import com.bananaboard.shared.sharedkernel.validation.Error;
+import com.bananaboard.shared.sharedkernel.validation.Result;
 import com.bananaboard.user.domain.errors.UserDomainError;
 
 public class Username {

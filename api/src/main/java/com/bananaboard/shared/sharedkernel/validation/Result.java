@@ -1,4 +1,4 @@
-package com.bananaboard.sharedkernel.validation;
+package com.bananaboard.shared.sharedkernel.validation;
 
 import java.util.Collections;
 import java.util.List;

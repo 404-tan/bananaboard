@@ -1,7 +1,7 @@
 package com.bananaboard.user.domain.entities;
 
-import com.bananaboard.sharedkernel.validation.Result;
-import com.bananaboard.sharedkernel.valueobjects.Uuid;
+import com.bananaboard.shared.sharedkernel.validation.Result;
+import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
 import com.bananaboard.user.domain.valueobjects.Image;
 
 public class ProfileIcon {

@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.bananaboard.sharedkernel.valueobjects.Uuid;
+import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
 
 public class Role implements GrantedAuthority{
     private Uuid id;

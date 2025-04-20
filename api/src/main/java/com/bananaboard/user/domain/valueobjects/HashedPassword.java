@@ -1,6 +1,7 @@
 package com.bananaboard.user.domain.valueobjects;
 
-import com.bananaboard.sharedkernel.validation.Result;
+import com.bananaboard.shared.sharedkernel.validation.Result;
+import com.bananaboard.user.domain.contracts.PasswordHasher;
 import com.bananaboard.user.domain.errors.UserDomainError;
 
 import java.util.Objects;
@@ -12,10 +13,12 @@ public class HashedPassword {
         this.value = value;
     }
 
-    public static Result<HashedPassword> create(String value) {
-        if (value.trim().isEmpty()) return Result.failure(UserDomainError.HashedPasswordError.EmptyHash);
-    
-        return Result.success(new HashedPassword(value));
+    public static Result<HashedPassword> create(Password password,PasswordHasher hasher) {
+        try {
+            return Result.success(hasher.hash(password));
+        } catch (Exception e) {
+            return Result.failure(UserDomainError.HashedPasswordError.HashingFailed);
+        }
     }
 
     public String getValue() {
@@ -24,7 +27,7 @@ public class HashedPassword {
 
     @Override
     public String toString() {
-        return "********"; // nunca expõe o hash real
+        return "********";
     }
 
     @Override

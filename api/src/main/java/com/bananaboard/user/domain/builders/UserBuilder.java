@@ -1,99 +1,100 @@
 package com.bananaboard.user.domain.builders;
-
-import com.bananaboard.sharedkernel.validation.Result;
-import com.bananaboard.sharedkernel.valueobjects.Uuid;
-import com.bananaboard.sharedkernel.utils.UuidUtils;
-import com.bananaboard.sharedkernel.validation.Error;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import com.bananaboard.shared.sharedkernel.builders.BaseBuilder;
+import com.bananaboard.shared.sharedkernel.exceptions.InvalidUuidException;
+import com.bananaboard.shared.sharedkernel.utils.UuidUtils;
+import com.bananaboard.shared.sharedkernel.validation.Error;
+import com.bananaboard.shared.sharedkernel.validation.Result;
+import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
 import com.bananaboard.user.domain.contracts.PasswordHasher;
 import com.bananaboard.user.domain.entities.User;
 import com.bananaboard.user.domain.errors.UserDomainError;
 import com.bananaboard.user.domain.valueobjects.*;
-import java.util.*;
 
-public final class UserBuilder {
-    private static final String EMPTY = "";
-    
-    private String password = EMPTY;
-    private String email = EMPTY;
-    private String username = EMPTY;
-    private String profileIconId = EMPTY;
-    private String bio = EMPTY;
-    private Set<String> rolesIds = new HashSet<>();
+
+
+public final class UserBuilder extends BaseBuilder<User> {
+    private Username username;
+    private Email email;
+    private Password password;
+    private Biography bio;
+    private Uuid profileIconId;
+    private Set<Uuid> rolesIds = new HashSet<>();
     private PasswordHasher hasher;
 
-    public UserBuilder withUsername(String username){
-        this.username = username;
+    private final List<Error> errors = new ArrayList<>();
+
+    public UserBuilder withUsername(String username) {
+        applyIfSuccess(Username.create(username),  u -> this.username = u);
         return this;
     }
 
-    public UserBuilder withPassword(String password){
-        this.password = password;
+    public UserBuilder withEmail(String email) {
+        applyIfSuccess(Email.create(email), e -> this.email = e);
         return this;
     }
 
-    public UserBuilder withEmail(String email){
-        this.email = email;
+    public UserBuilder withPassword(String password) {
+        applyIfSuccess(Password.create(password), p -> this.password = p);
         return this;
     }
 
-    public UserBuilder withRoles(Set<String> rolesIds){
-        this.rolesIds = rolesIds;
+    public UserBuilder withBio(String bio) {
+        applyIfSuccess(Biography.create(bio),b -> this.bio = b);
         return this;
     }
 
-    public UserBuilder withBio(String bio){
-        this.bio = bio;
+    public UserBuilder withProfileIcon(String profileIconId) {
+        applyIfSuccess(parseProfileIconUuid(profileIconId), p -> this.profileIconId = p);
         return this;
     }
 
-    public UserBuilder withProfileIcon(String profileIconId){
-        this.profileIconId = profileIconId;
+    public UserBuilder withRoles(Set<String> rolesIds) {
+        if (rolesIds.isEmpty()) errors.add(UserDomainError.UserBuilderError.InvalidMinimumRoles);
+        applyIfSuccess(parseRolesUuid(rolesIds),rIds -> this.rolesIds = rIds);
         return this;
     }
 
     public UserBuilder withPasswordHasher(PasswordHasher hasher) {
+        if (hasher == null) errors.add(UserDomainError.UserBuilderError.MissingHasher);
         this.hasher = hasher;
         return this;
     }
 
     public Result<User> build() {
-        List<Error> errors = new ArrayList<>();
-
-        Result<Username> usernameResult = Username.create(username);
-        if (usernameResult.isFailure()) errors.addAll(usernameResult.getErrors());
-
-        Result<Email> emailResult = Email.create(email);
-        if (emailResult.isFailure()) errors.addAll(emailResult.getErrors());
-
-        Result<Password> passwordResult = Password.create(password);
-        if (passwordResult.isFailure()) errors.addAll(passwordResult.getErrors());
-
-        Result<Biography> bioResult = Biography.create(bio);
-        if (bioResult.isFailure()) errors.addAll(bioResult.getErrors());
-
-        if (hasher == null) {
-            errors.add(UserDomainError.UserBuilderError.MissingHasher);
-        }
-        if ( profileIconId == null || profileIconId.isEmpty()) errors.add(UserDomainError.UserBuilderError.EmptyProfileIconId);
-        
-        if(rolesIds.size() < 1) errors.add(UserDomainError.UserBuilderError.InvalidMinimumRoles);
-        Result<Set<Uuid>> resultRolesUuid = UuidUtils.parseUuidSet(rolesIds, "UserBuilder.Roles");
-        
-
-        if(resultRolesUuid.isFailure()) errors.addAll(resultRolesUuid.getErrors());
+        Result<HashedPassword> hashedPasswordResult = HashedPassword.create(this.password, this.hasher);
+        if(hashedPasswordResult.isFailure()) this.errors.addAll(hashedPasswordResult.getErrors());
         if (!errors.isEmpty()) return Result.failure(errors);
+        
 
-        HashedPassword hashedPassword = hasher.hash(passwordResult.getValue());
 
         User user = new User(
-            usernameResult.getValue(),
-            emailResult.getValue(),
-            hashedPassword,
-            new Uuid(profileIconId),
-            bioResult.getValue(),
-            resultRolesUuid.getValue()
+            username,
+            email,
+            hashedPasswordResult.getValue(),
+            profileIconId,
+            bio,
+            rolesIds
         );
 
         return Result.success(user);
     }
+    private Result<Uuid> parseProfileIconUuid(String profileIconId){
+        try{
+            return Result.success(new Uuid(profileIconId));
+        }catch(InvalidUuidException e){
+            return Result.failure(UserDomainError.UserBuilderError.InvalidProfileIconId);
+        }
+    }
+    private Result<Set<Uuid>> parseRolesUuid(Set<String> rolesIds){
+        try{
+            return Result.success(UuidUtils.parseUuidSet(rolesIds));
+        }catch(InvalidUuidException e){
+            return Result.failure(UserDomainError.UserBuilderError.InvalidRoleId(e.getInvalidId()));
+        }
+    }
+
 }

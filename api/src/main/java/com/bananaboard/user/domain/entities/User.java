@@ -6,8 +6,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
-import com.bananaboard.sharedkernel.validation.Result;
-import com.bananaboard.sharedkernel.valueobjects.Uuid;
+import com.bananaboard.shared.sharedkernel.validation.Result;
+import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
 import com.bananaboard.user.domain.errors.UserDomainError.UserError;
 import com.bananaboard.user.domain.valueobjects.*;
 

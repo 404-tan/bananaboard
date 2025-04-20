@@ -1,12 +1,11 @@
 package com.bananaboard.user.domain.valueobjects;
 
-import com.bananaboard.sharedkernel.validation.Result;
+import com.bananaboard.shared.sharedkernel.validation.Error;
+import com.bananaboard.shared.sharedkernel.validation.Result;
 import com.bananaboard.user.domain.errors.UserDomainError;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.bananaboard.sharedkernel.validation.Error;
 public class Image {
     private final String path;
     private final String mimeType;
