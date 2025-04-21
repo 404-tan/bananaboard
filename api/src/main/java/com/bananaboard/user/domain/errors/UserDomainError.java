@@ -47,6 +47,9 @@ public final class UserDomainError {
     }
     public static final class UserError {
         public static final Error SamePasswordAsPrevious = new Error ("User.UpdatePassword","SamePasswordAsPrevious", "The password is the same as previous.");
+        public static final Error SameUsernameAsPrevious = new Error ("User.UpdateBio","SameBioAsPrevious", "The bio is the same as previous.");
+        public static final Error SameBioAsPrevious = new Error ("User.UpdateBio","SameBioAsPrevious", "The bio is the same as previous.");
+        public static final Error SameProfileIconAsPrevious = new Error ("User.UpdateProfileIcon","SameProfileIconAsPrevious", "The bio is the same as previous.");
     }
     public static final class UserBuilderError{
         public static final Error InvalidProfileIconId = new Error("UserBuilder.Build","ProfileIconId.InvalidProfileIconId","The user profile icon is invalid");

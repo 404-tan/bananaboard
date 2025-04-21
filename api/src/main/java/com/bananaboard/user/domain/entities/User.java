@@ -106,5 +106,19 @@ public class User {
         this.password = newPassword;
         return Result.success();
     }
-
+    public Result<Void> updateUsername(Username newUsername) {
+        if (this.username.equals(newUsername)) return Result.failure(UserError.SameUsernameAsPrevious);
+        this.username = newUsername;
+        return Result.success();
+    }
+    public Result<Void> updateBio(Biography newBio) {
+        if (this.bio.equals(newBio)) return Result.failure(UserError.SameBioAsPrevious);
+        this.bio = newBio;
+        return Result.success();
+    }
+    public Result<Void> updateProfileIconId(Uuid newProfileIconId) {
+        if (this.profileIconId.equals(newProfileIconId)) return Result.failure(UserError.SameProfileIconAsPrevious);
+        this.profileIconId = newProfileIconId;
+        return Result.success();
+    }
 }

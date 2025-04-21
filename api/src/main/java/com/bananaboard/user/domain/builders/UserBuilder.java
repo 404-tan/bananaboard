@@ -3,9 +3,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.bananaboard.shared.sharedkernel.builders.BaseBuilder;
-import com.bananaboard.shared.sharedkernel.exceptions.InvalidUuidException;
-import com.bananaboard.shared.sharedkernel.utils.UuidUtils;
 import com.bananaboard.shared.sharedkernel.validation.Error;
 import com.bananaboard.shared.sharedkernel.validation.Result;
 import com.bananaboard.shared.sharedkernel.valueobjects.Uuid;
@@ -47,14 +48,16 @@ public final class UserBuilder extends BaseBuilder<User> {
         return this;
     }
 
-    public UserBuilder withProfileIcon(String profileIconId) {
-        applyIfSuccess(parseProfileIconUuid(profileIconId), p -> this.profileIconId = p);
+    public UserBuilder withProfileIcon(UUID profileIconId) {
+        this.profileIconId = new Uuid(profileIconId);
         return this;
     }
 
-    public UserBuilder withRoles(Set<String> rolesIds) {
+    public UserBuilder withRoles(Set<UUID> rolesIds) {
         if (rolesIds.isEmpty()) errors.add(UserDomainError.UserBuilderError.InvalidMinimumRoles);
-        applyIfSuccess(parseRolesUuid(rolesIds),rIds -> this.rolesIds = rIds);
+        this.rolesIds = rolesIds.stream()
+            .map(uuid -> new Uuid(uuid))
+            .collect(Collectors.toSet());
         return this;
     }
 
@@ -81,20 +84,6 @@ public final class UserBuilder extends BaseBuilder<User> {
         );
 
         return Result.success(user);
-    }
-    private Result<Uuid> parseProfileIconUuid(String profileIconId){
-        try{
-            return Result.success(new Uuid(profileIconId));
-        }catch(InvalidUuidException e){
-            return Result.failure(UserDomainError.UserBuilderError.InvalidProfileIconId);
-        }
-    }
-    private Result<Set<Uuid>> parseRolesUuid(Set<String> rolesIds){
-        try{
-            return Result.success(UuidUtils.parseUuidSet(rolesIds));
-        }catch(InvalidUuidException e){
-            return Result.failure(UserDomainError.UserBuilderError.InvalidRoleId(e.getInvalidId()));
-        }
     }
 
 }

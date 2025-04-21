@@ -24,10 +24,10 @@ public class UserMapperImpl implements UserMapper {
             Username.create(entity.getUsername()).getValue(),
             Email.create(entity.getEmail()).getValue(),
             HashedPassword.fromHashedValue(entity.getHashedPassword()),
-            new Uuid(entity.getProfileIconId().toString()),
+            new Uuid(entity.getProfileIconId()),
             Biography.create(entity.getBio()).getValue(),
             entity.getReceivedRoles().stream()
-                .map(role -> new Uuid(role.getRoleId().toString()))
+                .map(role -> new Uuid(role.getRoleId()))
                 .collect(Collectors.toSet())
         );
     }
